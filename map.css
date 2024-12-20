@@ -1,0 +1,688 @@
+/*
+OpenRailwayMap Copyright (C) 2012 Alexander Matheisen
+This program comes with ABSOLUTELY NO WARRANTY.
+This is free software, and you are welcome to redistribute it under certain conditions.
+See https://wiki.openstreetmap.org/wiki/OpenRailwayMap for details.
+*/
+
+@charset "utf-8";
+
+html,body
+{
+	background-color: white;
+	color: black;
+	margin: 0;
+	padding: 0;
+	font-family: Trebuchet MS,Helvetica,Arial,sans-serif;
+	overflow-y: hidden;
+}
+
+/* page title */
+#header
+{
+	font-size: 20px;
+	color: black;
+	padding-left: 5px;
+	position: relative;
+	top: 2px;
+}
+
+#header a
+{
+	color: #3b4a8e;
+	text-decoration: none;
+}
+
+#header a:hover
+{
+	color: #3b4a8e;
+	text-decoration: underline;
+}
+
+/* description in header */
+#osm
+{
+	font-size: 11px;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	color: white;
+	padding-left: 5px;
+}
+
+#osm a
+{
+	color: #3b4a8e;
+	text-decoration: none;
+}
+
+#osm a:hover
+{
+	color: #3b4a8e;
+	text-decoration: underline;
+}
+
+/* map frame */
+#mapFrame
+{
+	background-color: #f1eee8;
+	color: black;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 300px;
+	right: 0px;
+	border-left: 1px solid black;
+}
+
+/* text which is shown when javascript is not activated */
+noscript p
+{
+	font-size: 15px;
+	color: black;
+	margin-left: 80px;
+	margin-top: 100px;
+}
+
+#image
+{
+	max-height: 60px;
+	min-height: 32px;
+	min-width: 32px;
+	border: 1px solid black;
+	float: right;
+	margin-left: 10px;
+	background-color: white;
+}
+
+#loadingImage
+{
+	background-image: url(../img/loading.gif);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+
+#image:hover
+{
+	cursor: pointer;
+	-o-box-shadow: 0px 0px 7px #aaaaaa;
+	-webkit-box-shadow: 0px 0px 7px #aaaaaa;
+	-moz-box-shadow: 0px 0px 7px #aaaaaa;
+	box-shadow: 0px 0px 7px #aaaaaa;
+}
+
+/* loading image */
+.loading
+{
+	text-align: center;
+	width: 16px;
+	height: 16px;
+}
+
+/* names of clustered popups */
+.clusterName
+{
+	text-decoration: none;
+	font-weight: normal;
+	font-size: 12px;
+}
+
+.clusterName:hover
+{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* loading indicator of search engine */
+.loadingMoreInfo
+{
+	padding: 10px;
+	text-align: center;
+	font-size: 12px;
+	color: black;
+}
+
+.loadingMoreInfo img
+{
+	text-align: center;
+	width: 16px;
+	height: 16px;
+}
+
+.loadingMoreInfo:hover img
+{
+	text-align: center;
+	width: 16px;
+	height: 16px;
+}
+
+/* hidden frame to which josm remote plugin messages are echoed */
+#josmFrame
+{
+	display: none;
+	visibility: hidden;
+	width: 0;
+	height: 0;
+}
+
+/* messagebar, e.g. shown while loading search results */
+.messageBarTrue
+{
+	z-index: 1000;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	-webkit-transition: opacity;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 500ms;
+	-moz-transition: opacity;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 500ms;
+	-o-transition: opacity;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 500ms;
+	opacity: 0.9;
+	overflow: hidden;
+	position: absolute;
+	left: 350px;
+	top: 20px;
+	height: 26px;
+	background-color: #969696;
+	color: white;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+	padding: 1px 10px;
+}
+
+.messageBarTrue img
+{
+	width: 16px;
+	height: 16px;
+}
+
+.messageBarFalse
+{
+	font-size: 0px;
+	-webkit-transition: opacity;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 500ms;
+	-moz-transition: opacity;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 500ms;
+	-o-transition: opacity;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 500ms;
+	opacity: 0;
+	overflow: hidden;
+}
+
+/* errorbar, e.g. shown when no searchresults were found */
+.errorBarTrue
+{
+	z-index: 1000;
+	font-size: 20px;
+	font-weight: bold;
+	text-align: center;
+	-webkit-transition: opacity;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 500ms;
+	-moz-transition: opacity;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 500ms;
+	-o-transition: opacity;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 500ms;
+	opacity: 0.9;
+	overflow: hidden;
+	position: absolute;
+	left: 350px;
+	top: 20px;
+	height: 26px;
+	background-color: #cc5252;
+	color: white;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-o-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.errorBarFalse
+{
+	font-size: 0px;
+	-webkit-transition: opacity;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 500ms;
+	-moz-transition: opacity;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 500ms;
+	-o-transition: opacity;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 500ms;
+	opacity: 0;
+	overflow: hidden;
+}
+
+/* search box */
+#searchBox
+{
+	font-size: 18px;
+	height: 21px;
+	vertical-align: middle;
+	margin-top: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
+	background-color: white;
+	border: 1px solid black;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	-o-border-radius: 3px;
+	border-radius: 3px;
+	width: 230px;
+	padding-right: 18px;
+	padding-left: 22px;
+}
+
+#searchBox:focus
+{
+	-o-box-shadow: 0px 0px 6px 1px #5898f1;
+	-webkit-box-shadow: 0px 0px 6px 1px #5898f1;
+    -moz-box-shadow: 0px 0px 6px 1px #5898f1;
+    box-shadow: 0px 0px 6px 1px #5898f1;
+}
+
+/* search button, integrated into searchbox*/
+#searchButton
+{
+	background-color: white;
+	vertical-align: middle;
+	position: relative;
+	top: -9px;
+	left: 12px;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	margin-bottom: -10px;
+}
+
+/* clear button, integrated into searchbox*/
+#clearButton
+{
+	background-color: white;
+	vertical-align: middle;
+	position: relative;
+	top: -23px;
+	left: 250px;
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	margin-bottom: -30px;
+}
+
+/* links of contact, more info, ... */
+#linkBar
+{
+	color: black;
+	padding-left: 5px;
+	padding-top: 8px;
+	padding-bottom: 5px;
+	border-bottom: 1px solid #e6ddd5;
+}
+
+/* links in footer */
+.links
+{
+	color: #3b4a8e;
+	font-size: 12px;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.links:hover
+{
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+/* last update */
+#info
+{
+	color: black;
+	font-size: 11px;
+	padding-left: 5px;
+	margin-top: 20px;
+}
+
+/* info like "zoom in to show markers" in footer */
+#status
+{
+	color: #ff5e5e;
+	font-size: 12px;
+	margin-left: 5px;
+	background-color: white;
+}
+
+/* box for search result at the left side */
+.sideBar
+{
+	background-color: white;
+	color: black;
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	width: 293px;
+	padding: 3px;
+	overflow-x: hidden;
+	overflow-y: auto;
+    border-right: 1px solid white;
+    z-index: 100;
+}
+
+/* box for search result at the left side */
+#styleSelectionBar
+{
+	padding: 10px;
+	margin-left: 5px;
+	width: 251px;
+	border: 1px solid #aaaaaa;
+	font-size: 14px;
+}
+
+/* box for the legend at the left side */
+#legendBar
+{
+	padding: 10px;
+	margin-left: 5px;
+	margin-top: 10px;
+	width: 251px;
+	font-size: 14px;
+	border: 1px solid #aaaaaa;
+}
+
+/* the legend itself */
+#legend
+{
+	margin-top: 10px;
+	width: 251px;
+	border: none;
+	height: 100px;
+}
+
+/* boxes of ext details and search results */
+.infoBar
+{
+	width: 271px;
+	margin-bottom: 20px;
+	margin-left: 5px;
+	margin-right: 5px;
+	border: 1px solid #aaaaaa;
+}
+
+.infoBarOut
+{
+	height: 0px;
+}
+
+/* search results */
+.resultEntry
+{
+	color: black;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 7px;
+	font-size: 12px;
+	-webkit-transition: background-color;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 200ms;
+	-moz-transition: background-color;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 200ms;
+	-o-transition: background-color;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 200ms;
+	background-color: white;
+	background: -moz-linear-gradient(top, white 0, #f0f0f0 67%, white 100%);
+	background: -webkit-linear-gradient(top, white 0, #f0f0f0 67%, white 100%);
+	background: -o-linear-gradient(top, white 0, #f0f0f0 67%, white 100%);
+	background: -ms-linear-gradient(top, white 0, #f0f0f0 67%, white 100%);
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.resultEntry:hover
+{
+	color: white;
+	cursor: pointer;
+	background-color: #6baced;
+	background: -moz-linear-gradient(top, #6baced 0, #64a1de 67%, #6baced 100%);
+	background: -webkit-linear-gradient(top, #6baced 0, #64a1de 67%, #6baced 100%);
+	background: -o-linear-gradient(top, #6baced 0, #64a1de 67%, #6baced 100%);
+	background: -ms-linear-gradient(top, #6baced 0, #64a1de 67%, #6baced 100%);
+	border-bottom: 1px solid #64a1de;
+}
+
+.resultEntry b
+{
+	font-size: 14px;
+}
+
+/* links of each search result to navigation feature */
+.route
+{
+	font-size: 0px;
+	height: 0px;
+	-webkit-transition: height;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 200ms;
+	-moz-transition: height;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 200ms;
+	-o-transition: height;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 200ms;
+}
+
+.resultEntry:hover .route
+{
+	font-size: 10px;
+	height: 12px;
+	-webkit-transition: height;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 200ms;
+	-moz-transition: height;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 200ms;
+	-o-transition: height;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 200ms;
+}
+
+#moreResults
+{
+	color: black;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 7px;
+	background-color: white;
+	font-size: 12px;
+	-webkit-transition: background-color;
+	-webkit-transition-timing-function: ease-in-out;
+	-webkit-transition-duration: 200ms;
+	-moz-transition: background-color;
+	-moz-transition-timing-function: ease-in-out;
+	-moz-transition-duration: 200ms;
+	-o-transition: background-color;
+	-o-transition-timing-function: ease-in-out;
+	-o-transition-duration: 200ms;
+}
+
+#moreResults:hover
+{
+	color: white;
+	background-color: #6baced;
+	cursor: pointer;
+}
+
+#errorResults
+{
+	color: white;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 3px;
+	padding-bottom: 7px;
+	background-color: #E95050;
+	font-size: 12px;
+}
+
+#searchOption
+{
+	position: relative;
+	top: -13px;
+}
+
+#searchOptionCaption
+{
+	position: relative;
+	top: -15px;
+	color: white;
+	font-size: 12px;
+	font-style: italic;
+}
+
+/* small advertisements or notifications */
+#ad
+{
+	background-color: #ffc36b;
+	background: -moz-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(241, 167, 62, 1) 67%, rgba(194, 153, 94, 1) 100%);
+	background: -webkit-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(241, 167, 62, 1) 67%, rgba(194, 153, 94, 1) 100%);
+	background: -o-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(241, 167, 62, 1) 67%, rgba(194, 153, 94, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(241, 167, 62, 1) 67%, rgba(194, 153, 94, 1) 100%);
+	color: black;
+	border: 1px solid gray;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	margin: 5px;
+}
+
+#ad:hover
+{
+	background-color: #ffc36b;
+	background: -moz-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(194, 153, 94, 1) 67%, rgba(204, 148, 69, 1) 100%);
+	background: -webkit-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(194, 153, 94, 1) 67%, rgba(204, 148, 69, 1) 100%);
+	background: -o-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(194, 153, 94, 1) 67%, rgba(204, 148, 69, 1) 100%);
+	background: -ms-linear-gradient(top, rgba(255, 195, 107, 1) 0, rgba(194, 153, 94, 1) 67%, rgba(204, 148, 69, 1) 100%);
+	cursor: pointer;
+	-webkit-box-shadow: 0px 0px 4px #aaa;
+	-moz-box-shadow: 0px 0px 4px #aaa;
+	box-shadow: 0px 0px 4px #aaa;
+}
+
+
+/* small advertisement for donators */
+#poweredby
+{
+	position: relative;
+	left: 30px;
+	top: 10px;
+}
+
+#poweredby img
+{
+	border: 1px solid gray;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+}
+
+#poweredby img:hover
+{
+	cursor: pointer;
+	-webkit-box-shadow: 0px 0px 8px #aaa;
+	-moz-box-shadow: 0px 0px 8px #aaa;
+	box-shadow: 0px 0px 8px #aaa;
+}
+
+#locateButton
+{
+	position: absolute;
+	left: 310px;
+	top: 70px;
+	width: 26px;
+	height: 26px;
+	background-color: white;
+	background-image: url('../img/locate.png');
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	background-size: 23px 23px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	-o-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #aaa;
+	box-shadow: 0 1px 7px rgba(0,0,0,0.4);
+	z-index: 1000;
+}
+
+#locateButton:hover
+{
+	background-color: #f4f4f4;
+	cursor: pointer;
+}
+
+/* language selection box */
+#langSelector
+{
+	position: absolute;
+	left: 185px;
+	top: 5px;
+	font-size: 12px;
+}
+
+#langSelection
+{
+	margin-bottom: -20px;
+}
+
+/* donate button */
+#donate
+{
+	margin-left: 75px;
+	margin-bottom: 5px;
+	width: 140px;
+	height: 40px;
+	background-image: url(../donate/donate.png);
+	background-repeat: no-repeat;
+	padding: 2px 5px 2px 5px;
+	text-align: center;
+	position: absolute;
+	right: 0px;
+}
+
+#donate a
+{
+	text-decoration: none;
+	color: white;
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.FlattrButton
+{
+	position: absolute;
+	right: 20px;
+	margin-top: -25px;
+}
+
+#PaypalButton
+{
+	margin-left: 5px;
+	margin-top: 10px;
+}
